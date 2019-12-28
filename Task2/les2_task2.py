@@ -11,15 +11,17 @@
 '''
 import json
 
+
 def write_order_to_json(item, quantity, price, buyer, date):
     '''writes new order to orders.json'''
     file_name = 'orders.json'
     json_data = json.load(open(file_name, encoding='utf-8'))
     items = []
     items.append({"item": item, "quantity": quantity, "price": price, "buyer": buyer,
-                        "date": date})
+                  "date": date})
     json_data['orders'] += items
     json.dump(json_data, open(file_name, mode='w', encoding='utf-8'), sort_keys=True, indent=4)
+
 
 if __name__ == "__main__":
     write_order_to_json('printer', '10', '6700', 'Ivanov', '10.10.10')
