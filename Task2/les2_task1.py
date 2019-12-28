@@ -21,31 +21,49 @@ import csv
 import re
 from chardet import detect
 
-PAT_MAN = re.compile('Изготовитель системы: +(\w+)')
-PAT_OS_NAME = re.compile('Название ОС: +(\w+ \w+ \d\.?\d? \w+)')
-PAT_CODE = re.compile('Код продукта: +(\w+-\w+-\w+-\w+)')
-PAT_OS_TYPE = re.compile('Тип системы: +(\w+-\w+ \w+)')
 
-FILE_NAMES = ['info_1.txt','info_2.txt','info_3.txt']
-MAIN_DATA = ['Изготовитель системы', 'Название ОС', 'Код продукта', 'Тип системы']
+def get_data(p_man, p_os_name, p_code, p_os_type, f_names, m_data):
+    '''returns data by patterns from file list'''
+    man_lst = []
+    os_name_lst = []
+    code_lst = []
+    os_type_lst = []
 
-MAN_LST = []
-OS_NAME_LST = []
-CODE_LST = []
-OS_TYPE = []
+    for name in f_names:
+        with open(name, 'rb') as f_n:
+            data = f_n.read()
+            enc = detect(data)['encoding']
+        with open(name, encoding=enc) as f_n:
+            data = f_n.read()
+            print(data)
+        man_lst.append(re.findall(p_man, data))
+        os_name_lst.append(re.findall(p_os_name, data))
+        code_lst.append(re.findall(p_code, data))
+        os_type_lst.append(re.findall(p_os_type, data))
+    for i in range(len(f_names)):
+        spam_lst = []
+        spam_lst.append(man_lst[i][0])
+        spam_lst.append(os_name_lst[i][0])
+        spam_lst.append(code_lst[i][0])
+        spam_lst.append(os_type_lst[i][0])
+        m_data.append(spam_lst)
+    return m_data
 
-for name in FILE_NAMES:
-    with open(name, 'rb') as f_n:
-        data = f_n.read()
-        enc = detect(data)['encoding']
-    with open(name, encoding=enc) as f_n:
-        data = f_n.read()
-        print(data)
-    MAN_LST.append(re.findall(PAT_MAN, data))
-    OS_NAME_LST.append(re.findall(PAT_OS_NAME, data))
-    CODE_LST.append(re.findall(PAT_CODE, data))
-    OS_TYPE.append(re.findall(PAT_OS_TYPE, data))
-    print(MAN_LST)
-    print(OS_NAME_LST)
-    print(CODE_LST)
-    print(OS_TYPE)
+
+def write_to_csv(f_n, data):
+    '''writes data to f_n in csv'''
+    csv_writer = csv.writer(f_n, quoting=csv.QUOTE_NONNUMERIC)
+    csv_writer.writerows(data)
+
+
+if __name__ == "__main__":
+    PAT_MAN = re.compile('Изготовитель системы: +(\w+)')
+    PAT_OS_NAME = re.compile('Название ОС: +(\w+ \w+ \d\.?\d? \w+)')
+    PAT_CODE = re.compile('Код продукта: +(\w+-\w+-\w+-\w+)')
+    PAT_OS_TYPE = re.compile('Тип системы: +(\w+-\w+ \w+)')
+
+    FILE_NAMES = ['info_1.txt', 'info_2.txt', 'info_3.txt']
+    MAIN_DATA = [['Изготовитель системы', 'Название ОС', 'Код продукта', 'Тип системы']]
+
+    with open('main_data.csv', 'w') as f:
+        write_to_csv(f, get_data(PAT_MAN, PAT_OS_NAME, PAT_CODE, PAT_OS_TYPE, FILE_NAMES, MAIN_DATA))
