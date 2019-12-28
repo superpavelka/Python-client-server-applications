@@ -20,10 +20,10 @@ def write_order_to_json(item, quantity, price, buyer, date):
     items.append({"item": item, "quantity": quantity, "price": price, "buyer": buyer,
                   "date": date})
     json_data['orders'] += items
-    json.dump(json_data, open(file_name, mode='w', encoding='utf-8'), sort_keys=True, indent=4)
+    json.dump(json_data, open(file_name, mode='w', encoding='utf-8'), sort_keys=True, indent=4,ensure_ascii=False)
 
 
 if __name__ == "__main__":
     write_order_to_json('printer', '10', '6700', 'Ivanov', '10.10.10')
     write_order_to_json('printer2', '11', '7700', 'Petrov', '10.10.11')
-    write_order_to_json('printer3', '12', '8700', 'Sidorov', '10.10.12')
+    write_order_to_json('принтер3', '12', '8700', 'Сидоров', '10.10.12')
