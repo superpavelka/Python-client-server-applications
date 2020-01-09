@@ -20,7 +20,8 @@ def write_order_to_json(item, quantity, price, buyer, date):
     items.append({"item": item, "quantity": quantity, "price": price, "buyer": buyer,
                   "date": date})
     json_data['orders'] += items
-    json.dump(json_data, open(file_name, mode='w', encoding='utf-8'), sort_keys=True, indent=4,ensure_ascii=False)
+    json.dump(json_data, open(file_name, mode='w', encoding='utf-8'),
+              sort_keys=True, indent=4, ensure_ascii=False)
 
 
 if __name__ == "__main__":

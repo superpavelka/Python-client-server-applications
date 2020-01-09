@@ -11,13 +11,13 @@
 '''
 import yaml
 
-items = ['computer', 'printer', 'keyboard']
-quantity = 3
-price = {'computer' : '200€ - 1000€', 'printer' : '100€ - 300€', 'keyboard' : '5€ - 50 €'}
-data_to_yaml = {'items' : items, 'quantity' : quantity, 'price' : price}
+ITEMS = ['computer', 'printer', 'keyboard']
+QUANTITY = 3
+PRICE = {'computer': '200€ - 1000€', 'printer': '100€ - 300€', 'keyboard': '5€ - 50 €'}
+DATA_TO_YAML = {'items': ITEMS, 'quantity': QUANTITY, 'price': PRICE}
 
 with open('data_write.yaml', 'w') as f_n:
-    yaml.dump(data_to_yaml, f_n, default_flow_style=False, allow_unicode = True)
+    yaml.dump(DATA_TO_YAML, f_n, default_flow_style=False, allow_unicode=True)
 
 with open('data_write.yaml') as f_n:
     print(f_n.read())
