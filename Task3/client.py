@@ -61,7 +61,10 @@ def main():
     # Инициализация сокета и обмен
 
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    transport.connect((server_address, server_port))
+    try:
+        transport.connect((server_address, server_port))
+    except ConnectionRefusedError:
+        print('В соединении отказано!')
     message_to_server = create_presence()
     send_message(transport, message_to_server)
     try:
