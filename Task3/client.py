@@ -41,12 +41,12 @@ def process_ans(message):
 def main():
     '''Загружаем параметы коммандной строки'''
     try:
-        if '-addr' in sys.argv:
-            server_address = sys.argv[sys.argv.index('-addr') + 1]
+        if '-a' in sys.argv:
+            server_address = sys.argv[sys.argv.index('-a') + 1]
         else:
             server_address = sys.argv[1]
-        if '-addr' in sys.argv:
-            server_port = int(sys.argv[sys.argv.index('-port') + 1])
+        if '-p' in sys.argv:
+            server_port = int(sys.argv[sys.argv.index('-p') + 1])
         else:
             server_port = int(sys.argv[2])
         if server_port < 1024 or server_port > 65535:
