@@ -3,9 +3,11 @@
 import sys
 import os
 import unittest
+
 sys.path.append(os.path.join(os.getcwd(), '..'))
 from common.variables import RESPONSE, ERROR, USER, LOGIN, TIME, ACTION, PRESENCE
 from client import create_presence, process_ans
+
 
 class TestClass(unittest.TestCase):
     '''
@@ -16,7 +18,7 @@ class TestClass(unittest.TestCase):
         """Тест коректного запроса"""
         test = create_presence()
         test[TIME] = 0  # время необходимо приравнять принудительно
-                          # иначе тест никогда не будет пройден
+        # иначе тест никогда не будет пройден
         self.assertEqual(test, {ACTION: PRESENCE, TIME: 0, USER: {LOGIN: 'Guest'}})
 
     def test_def_presense_wrong_login(self):

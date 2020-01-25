@@ -3,9 +3,11 @@
 import sys
 import os
 import unittest
+
 sys.path.append(os.path.join(os.getcwd(), '..'))
 from common.variables import RESPONSE, ERROR, USER, LOGIN, TIME, ACTION, PRESENCE
 from server import process_client_message
+
 
 class TestServer(unittest.TestCase):
     '''
@@ -47,6 +49,11 @@ class TestServer(unittest.TestCase):
         """Ошибка - не Guest"""
         self.assertEqual(process_client_message(
             {ACTION: PRESENCE, TIME: 0, USER: {LOGIN: 'Guest1'}}), self.err_dict)
+
+    def test_unknown_user_wrong_ans(self):
+        """Ошибка - не Guest"""
+        self.assertNotEqual(process_client_message(
+            {ACTION: PRESENCE, TIME: 0, USER: {LOGIN: 'Guest1'}}), self.ok_dict)
 
     def test_ok_check(self):
         """Корректный запрос"""
