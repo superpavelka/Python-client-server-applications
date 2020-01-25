@@ -50,10 +50,6 @@ def main():
     except IndexError:
         print('После параметра -\'p\' необходимо указать номер порта.')
         sys.exit(1)
-    except ValueError:
-        print(
-            'В качастве порта может быть указано только число в диапазоне от 1024 до 65535.')
-        sys.exit(1)
 
     # Затем загружаем какой адрес слушать
 
@@ -83,7 +79,7 @@ def main():
 
     while True:
         client, client_address = transport.accept()
-        SERVER_LOGGER.info(f'Установлено соедение с ПК {client_address}')
+        SERVER_LOGGER.info(f'Установлено соедение с компьютером {client_address}')
         try:
             message_from_client = get_message(client)
             SERVER_LOGGER.debug(f'Получено сообщение {message_from_client}')
@@ -97,7 +93,7 @@ def main():
                                 f'клиента {client_address}. Соединение закрывается.')
             client.close()
         except IncorrectDataRecivedError:
-            SERVER_LOGGER.error(f'От клиента {client_address} gриняты некорректные данные. '
+            SERVER_LOGGER.error(f'От клиента {client_address} приняты некорректные данные. '
                                 f'Соединение закрывается.')
             client.close()
 
