@@ -1,5 +1,7 @@
 """Константы"""
 
+import logging
+
 # Порт поумолчанию для сетевого ваимодействия
 DEFAULT_PORT = 8000
 # IP адрес по умолчанию для подключения клиента
@@ -11,7 +13,7 @@ MAX_PACKAGE_LENGTH = 1024
 # Кодировка проекта
 ENCODING = 'utf-8'
 # Текущий уровень логирования
-LOGGING_LEVEL = logging.DEBUG
+LOGGING_LEVEL = logging.INFO
 
 # Прококол JIM основные ключи:
 ACTION = 'action'

@@ -3,9 +3,13 @@
 import socket
 import sys
 import json
+import re
+import logging
+import logs.server_config
 from common.variables import ACTION, LOGIN, RESPONSE, MAX_CONNECTIONS, \
-    PRESENCE, TIME, USER, ERROR, DEFAULT_PORT, RESPONSE_DEFAULT_IP
+    PRESENCE, TIME, USER, ERROR, DEFAULT_PORT, DEFAULT_IP
 from common.utils import get_message, send_message
+from errors import IncorrectDataRecivedError
 
 # Инициализация логирования сервера.
 SERVER_LOGGER = logging.getLogger('server')
@@ -48,7 +52,7 @@ def main():
                                    f'{listen_port}. Допустимы адреса с 1024 до 65535.')
             sys.exit(1)
     except IndexError:
-        print('После параметра -\'p\' необходимо указать номер порта.')
+        SERVER_LOGGER.critical(f'После параметра -\'p\' необходимо указать номер порта.')
         sys.exit(1)
 
     # Затем загружаем какой адрес слушать
@@ -57,16 +61,23 @@ def main():
         if '-a' in sys.argv:
             listen_address = sys.argv[sys.argv.index('-a') + 1]
         else:
-            listen_address = ''
+            listen_address = DEFAULT_IP
 
     except IndexError:
-        print(
-            'После параметра \'a\'- необходимо указать адрес, который будет слушать сервер.')
+        SERVER_LOGGER.critical('После параметра \'a\'- необходимо указать адрес, который будет слушать сервер.')
+        sys.exit(1)
+    # Проверка IP адреса, если не соответсвует регулярке то выкинет исключение AttributeError
+    try:
+        [0 <= int(x) < 256 for x in
+         re.split('\.', re.match(r'^\d+\.\d+\.\d+\.\d+$', listen_address).group(0))].count(True) == 4
+
+    except AttributeError:
+        SERVER_LOGGER.critical(f'Попытка запуска сервера с указанием неподходящего IP адреса '
+                               f'{listen_address}.')
         sys.exit(1)
 
     SERVER_LOGGER.info(f'Запущен сервер, порт для подключений: {listen_port}, '
-                       f'адрес с которого принимаются подключения: {listen_address}. '
-                       f'Если адрес не указан, принимаются соединения с любых адресов.')
+                       f'адрес с которого принимаются подключения: {listen_address}.')
 
     # Готовим сокет
 
