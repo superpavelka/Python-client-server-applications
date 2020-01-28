@@ -49,20 +49,22 @@ def process_ans(message):
 
 def main():
     '''Загружаем параметы коммандной строки'''
+    if '-a' in sys.argv:
+        server_address = sys.argv[sys.argv.index('-a') + 1]
+    else:
+        server_address = DEFAULT_IP
+        CLIENT_LOGGER.info(f'Не найден параметр -\'a\'.'
+                           f'Установлено стандартное значение IP адреса: {server_address}')
+    if '-p' in sys.argv:
+        server_port = int(sys.argv[sys.argv.index('-p') + 1])
+    else:
+        server_port = DEFAULT_PORT
+        CLIENT_LOGGER.info(f'Не найден параметр -\'p\'.'
+                           f'Установлено стандартное значение порта: {server_port}')
     try:
-        if '-a' in sys.argv:
-            server_address = sys.argv[sys.argv.index('-a') + 1]
-        else:
-            server_address = sys.argv[1]
         # Проверка IP адреса, если не соответсвует регулярке то выкинет исключение AttributeError
         [0 <= int(x) < 256 for x in
          re.split('\.', re.match(r'^\d+\.\d+\.\d+\.\d+$', server_address).group(0))].count(True) == 4
-
-        if '-p' in sys.argv:
-            server_port = int(sys.argv[sys.argv.index('-p') + 1])
-        else:
-            server_port = int(sys.argv[2])
-
         if server_port < 1024 or server_port > 65535:
             raise AttributeError
 
